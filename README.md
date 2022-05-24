@@ -2,7 +2,7 @@
 Repository for the paper [*Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*](https://arxiv.org/abs/XXXX.XXXX).
 
 <p float="left">
-  <img src="https://github.com/IdePHICS/RandomLabelsUniversality/Figures/zero_reg.jpeg" height="270" />
+  <img src="[https://github.com/IdePHICS/RandomLabelsUniversality/Figures/zero_reg.jpeg](https://github.com/IdePHICS/RandomLabelsUniversality/blob/main/Figures/zero_reg.jpeg)" height="270" />
 </p>
 
 *An illustration of the universality in high-dimension: The training loss is shown as function of the number of samples n per input dimension p at vanishing regularization. In the left panel the square loss, in the right panel the hinge loss. The black solid line represents the
