@@ -1,5 +1,5 @@
-# Repository for the paper [*Gaussian Universality of Linear Classifiers
-with Random Labels in High-Dimension*](https://arxiv.org/abs/XXXX.XXXX).
+# Universality with random labels
+Repository for the paper [*Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*](https://arxiv.org/abs/XXXX.XXXX).
 
 <p float="left">
   <img src="https://github.com/gsicuro/GaussMixtureProject/blob/main/plots/animation_logistic.gif" height="270" />
