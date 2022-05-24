@@ -22,5 +22,5 @@ The notebooks are self-explanatory.
 
 ## Reference
 
-[1] *Learning Gaussian Mixtures with Generalised Linear Models: Precise Asymptotics in High-dimensions*,
-B Loureiro, G. Sicuro, C Gerbelot, A. Pacco, F Krzakala, L Zdeborová, [arXiv: 2106.03791](https://arxiv.org/abs/2106.03791) [stat.ML]
+[1] *Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*,
+Federica Gerace, Florent Krzakala, Bruno Loureiro, Ludovic Stephan, Lenka Zdeborová, [arXiv: XXXX.XXXX](https://arxiv.org/abs/XXXX.XXXX)[stat.ML]
