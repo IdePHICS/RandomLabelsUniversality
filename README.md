@@ -1,5 +1,5 @@
-# GaussMixtureProject
-Repository for the paper [*Learning Gaussian Mixtures with Generalised Linear Models: Precise Asymptotics in High-dimensions*](https://arxiv.org/abs/2106.03791).
+# Repository for the paper [*Gaussian Universality of Linear Classifiers
+with Random Labels in High-Dimension*](https://arxiv.org/abs/XXXX.XXXX).
 
 <p float="left">
   <img src="https://github.com/gsicuro/GaussMixtureProject/blob/main/plots/animation_logistic.gif" height="270" />
