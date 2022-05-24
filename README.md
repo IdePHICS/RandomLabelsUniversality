@@ -5,7 +5,8 @@ Repository for the paper [*Gaussian Universality of Linear Classifiers with Rand
   <img src="https://github.com/IdePHICS/RandomLabelsUniversality/Figures/zero_reg.pdf " height="270" />
 </p>
 
-*Left: logistic classification of three clusters with ridge regularisation for different values of the regularisation's strength λ. Center and right: test error and training error performing a ridge classification of a mixture of K=3 clusters with diagonal covariance in the high dimensional limit, with thoretical predictions compared with the results of numerical simulations.*
+*An illustration of the universality in high-dimension: The training loss is shown as function of the number of samples n per input dimension p at vanishing regularization. In the left panel the square loss, in the right panel the hinge loss. The black solid line represents the
+outcome of the theoretical calculation for iid Gaussian inputs, while dots refer to numerical simulations on different full-rank datasets.*
 
 ## Structure
 
