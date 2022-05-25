@@ -1,4 +1,4 @@
-# Universality with random labels
+# Universality with random labels (:warning: under construction! :construction: :construction_worker:)
 Repository for the paper [*Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*](https://arxiv.org/abs/XXXX.XXXX). 
 
 <p float="left">
@@ -14,8 +14,8 @@ In this repository we provide the code and some guided example to help the reade
 
 | File                          | Description                                                                                                                                                    |
 |-------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| ```/K2mix``` | Solver for the fixed point equations of the order parameters in the case of classification tasks on K=2 Gaussian clusters with nonhomogeneous diagonal covariances. The notebook [```how_to.ipynb```](https://github.com/gsicuro/GaussMixtureProject/blob/main/K2mix/how_to.ipynb) provides a step-by-step explanation on how to use the package. This implementation has been used to produce the results in Section 3.1 of the paper.           |
-| ```/multiK``` | Solver for the fixed point equations of the order parameters in the case of classification tasks on K Gaussian clusters with diagonal covariances. The notebook [```how_to.ipynb```](https://github.com/gsicuro/GaussMixtureProject/blob/main/multiK/how_to.ipynb) provides a step-by-step explanation on how to use the package. This implementation has been used to produce the results in Section 3.2 of the paper.                                     |
+| ```/theory``` | Solver for the fixed point equations . *Add description of files*.           |
+| ```/simulations``` | Finite instance simulations. *Add description of files*.                                     |
 
 The notebooks are self-explanatory.
 
