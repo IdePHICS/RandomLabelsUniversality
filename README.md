@@ -1,5 +1,5 @@
 # Universality with random labels (:warning: under construction! :construction: :construction_worker:)
-Repository for the paper [*Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*]([https://arxiv.org/abs/XXXX.XXXX](https://arxiv.org/abs/2205.13303)). 
+Repository for the paper [*Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*](https://arxiv.org/abs/2205.13303). 
 
 <p float="left">
   <img src="https://github.com/IdePHICS/RandomLabelsUniversality/blob/main/Figures/zero_reg.jpeg" height="270" />
@@ -22,4 +22,4 @@ The notebooks are self-explanatory.
 ## Reference
 
 [1] *Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*,
-Federica Gerace, Florent Krzakala, Bruno Loureiro, Ludovic Stephan, Lenka Zdeborová, [arXiv:2205.13303]([https://arxiv.org/abs/XXXX.XXXX](https://arxiv.org/abs/2205.13303))[stat.ML]
+Federica Gerace, Florent Krzakala, Bruno Loureiro, Ludovic Stephan, Lenka Zdeborová, [arXiv:2205.13303](https://arxiv.org/abs/2205.13303)[stat.ML]
