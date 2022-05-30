@@ -4,52 +4,90 @@ import pandas as pd
 import csv
 
 
-def statistics_learning_curve(n_seeds = 10, path_to_results_directory = './results'):
+def statistics_learning_curve_real(n_seeds = 10, loss = 'square_loss', path_to_res_folder = './results'):
 
-    theory = {'N': [], 'alpha': [], 'data_type': [], 'which_dataset': [],
-              'which_transform': [], 'non_lin': [], 'which_cov': [], 'which_mean': [],
+    res = {'p': [], 'alpha': [], 'which_real_dataset': [],
+              'which_transform': [], 'which_non_lin': [],
               'loss': [], 'lamb': [], 'train_loss':[]}
-    print(path_to_results_directory)
-    for s in range(n_seeds):
-        df = pd.read_csv(path_to_results_directory + "/seeds/" + resfile + "_seed_%d.csv"%(s))
-        theory['N'].append(df['N'])
-        theory['alpha'].append(df['alpha'])
-        theory['data_type'].append(df['data_type'])
-        theory['which_dataset'].append(df['which_dataset'])
-        theory['which_transform'].append(df['which_transform'])
-        theory['non_lin'].append(df['non_lin'])
-        theory['which_cov'].append(df['which_cov'])
-        theory['which_mean'].append(df['which_mean'])
-        theory['loss'].append(df['loss'])
-        theory['lamb'].append(df['lamb'])
-        theory['train_loss'].append(df['train_loss'])
 
-    theory_tmp = theory.copy()
-    theory_tmp =  pd.DataFrame.from_dict(theory_tmp)
-    theory_tmp.data_type = theory_tmp.data_type.apply(str)
-    theory_tmp.which_dataset = theory_tmp.which_dataset.apply(str)
-    theory_tmp.which_transform = theory_tmp.which_transform.apply(str)
-    theory_tmp.non_lin = theory_tmp.non_lin.apply(str)
-    theory_tmp.which_cov = theory_tmp.which_cov.apply(str)
-    theory_tmp.which_mean = theory_tmp.which_mean.apply(str)
-    theory_tmp.lamb = theory_tmp.lamb.apply(str)
-    theory_stat = theory_tmp.groupby(['data_type', 'which_dataset', 'which_transform', 'non_lin', 'which_cov', 'which_mean', 'lamb']).aggregate(mean_train_loss = ('train_loss', lambda x: np.vstack(x).mean(axis=0).tolist()),
+    for s in range(n_seeds):
+        df = pd.read_csv(path_to_res_folder + "/seeds/sim_%s_seed_%d_real.csv"%(loss,s))
+        res['alpha'].append(df['alpha'])
+        res['train_loss'].append(df['train_loss'])
+        res['p'].append(df['p'])
+        res['which_real_dataset'].append(df['which_real_dataset'])
+        res['which_transform'].append(df['which_transform'])
+        res['which_non_lin'].append(df['which_non_lin'])
+        res['loss'].append(df['loss'])
+        res['lamb'].append(df['lamb'])
+
+
+    res_tmp = res.copy()
+    res_tmp =  pd.DataFrame.from_dict(res_tmp)
+    res_tmp.which_real_dataset = res_tmp.which_real_dataset.apply(str)
+    res_tmp.which_transform = res_tmp.which_transform.apply(str)
+    res_tmp.which_non_lin = res_tmp.which_non_lin.apply(str)
+    res_tmp.lamb = res_tmp.lamb.apply(str)
+    res_stat = res_tmp.groupby(['which_real_dataset', 'which_transform', 'which_non_lin', 'lamb']).aggregate(mean_train_loss = ('train_loss', lambda x: np.vstack(x).mean(axis=0).tolist()),
                                                 std_train_loss = ('train_loss', lambda x: np.vstack(x).std(axis=0).tolist())).reset_index()
 
-    if os.path.isfile(path_to_results_directory + "/seeds/" + resfile + ".csv") == False:
-        with open(path_to_results_directory + "/seeds/" + resfile + ".csv", mode='w') as f:
-            f.write("n_seeds,N,alpha,data_type,which_dataset,which_transform,non_lin,which_cov,which_mean,loss,lamb,mean_train_loss,std_train_loss\n")
+    if os.path.isfile(path_to_res_folder + "/sim_%s_real.csv"%(loss)) == False:
+        with open(path_to_res_folder + "/sim_%s_real.csv"%(loss), mode='w') as f:
+            f.write("alpha,mean_train_loss,std_train_loss,p,n_seeds,which_real_dataset,which_transform,which_which_non_lin,loss,lamb\n")
 
-    with open(path_to_results_directory + "/seeds/" + resfile + ".csv", mode='a') as f:
+    with open(path_to_res_folder + "/sim_%s_real.csv"%(loss), mode='a') as f:
         wr = csv.writer(f, dialect='excel')
-        for i in range(len(theory_stat.index)):
+        for i in range(len(res_stat.index)):
             j = 0
-            n_seeds = len(theory['alpha'])
-            for alpha in theory['alpha'][0]:
-                wr.writerow([n_seeds, theory['N'][i][j], alpha, theory['data_type'][i][j],
-                theory['which_dataset'][i][j], theory['which_transform'][i][j], theory['non_lin'][i][j],
-                theory['which_cov'][i][j], theory['which_mean'][i][j], theory['loss'][i][j], theory['lamb'][i][j],
-                theory_stat['mean_train_loss'][i][j], theory_stat['std_train_loss'][i][j]/np.sqrt(n_seeds)])
+            n_seeds = len(res['alpha'])
+            for alpha in res['alpha'][0]:
+                wr.writerow([alpha, res_stat['mean_train_loss'][i][j], res_stat['std_train_loss'][i][j]/np.sqrt(n_seeds),
+                n_seeds, res['p'][i][j], res['which_real_dataset'][i][j], res['which_transform'][i][j], res['which_non_lin'][i][j],
+                res['loss'][i][j], res['lamb'][i][j]])
+                j += 1
+
+    return
+
+
+def statistics_learning_curve_synthetic(n_seeds = 10, loss = 'square_loss', which_synthetic_dataset = "single_gaussian", path_to_res_folder = './results'):
+
+    res = {'p': [], 'alpha': [], 'which_synthetic_dataset': [],
+              'cov_identifier': [], 'mean_identifier': [],
+              'loss': [], 'lamb': [], 'train_loss':[]}
+
+    for s in range(n_seeds):
+        df = pd.read_csv(path_to_res_folder + "/seeds/sim_%s_%s_seed_%d.csv"%(loss,which_synthetic_dataset,s))
+        res['p'].append(df['p'])
+        res['alpha'].append(df['alpha'])
+        res['which_synthetic_dataset'].append(df['which_synthetic_dataset'])
+        res['cov_identifier'].append(df['cov_identifier'])
+        res['mean_identifier'].append(df['mean_identifier'])
+        res['loss'].append(df['loss'])
+        res['lamb'].append(df['lamb'])
+        res['train_loss'].append(df['train_loss'])
+
+    res_tmp = res.copy()
+    res_tmp =  pd.DataFrame.from_dict(res_tmp)
+    res_tmp.which_synthetic_dataset = res_tmp.which_synthetic_dataset.apply(str)
+    res_tmp.cov_identifier = res_tmp.cov_identifier.apply(str)
+    res_tmp.mean_identifier = res_tmp.mean_identifier.apply(str)
+    res_tmp.lamb = res_tmp.lamb.apply(str)
+    res_stat = res_tmp.groupby(['which_synthetic_dataset', 'cov_identifier', 'mean_identifier', 'lamb']).aggregate(mean_train_loss = ('train_loss', lambda x: np.vstack(x).mean(axis=0).tolist()),
+                                                std_train_loss = ('train_loss', lambda x: np.vstack(x).std(axis=0).tolist())).reset_index()
+
+    if os.path.isfile(path_to_res_folder + "/sim_%s_%s.csv"%(loss,which_synthetic_dataset)) == False:
+        with open(path_to_res_folder + "/sim_%s_%s.csv"%(loss,which_synthetic_dataset), mode='w') as f:
+            f.write("alpha,mean_train_loss,std_train_loss,n_seeds,p,which_synthetic_dataset,cov_identifier,mean_identifier,loss,lamb\n")
+
+    with open(path_to_res_folder + "/sim_%s_%s.csv"%(loss,which_synthetic_dataset), mode='a') as f:
+        wr = csv.writer(f, dialect='excel')
+        for i in range(len(res_stat.index)):
+            j = 0
+            n_seeds = len(res['alpha'])
+            for alpha in res['alpha'][0]:
+                wr.writerow([alpha, res_stat['mean_train_loss'][i][j], res_stat['std_train_loss'][i][j]/np.sqrt(n_seeds), n_seeds, res['p'][i][j],
+                res['which_synthetic_dataset'][i][j],
+                res['cov_identifier'][i][j], res['mean_identifier'][i][j], res['loss'][i][j], res['lamb'][i][j]])
 
                 j += 1
 

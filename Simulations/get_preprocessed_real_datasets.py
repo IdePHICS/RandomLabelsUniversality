@@ -42,150 +42,158 @@ def preprocess_data_cifar10(dataset):
 def relu(x):
     return x * (x > 0.) + 0 * (x <= 0.)
 
-def get_real_data(p, which_dataset = "MNIST", which_transform = "no_transform", which_non_lin = "none"):
-    if which_dataset == "MNIST":
-        if which_transform == 'no_transform':
-            mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
-            X = preprocess_data_mnist(mnist)
-            ntot, dx, dy = X.shape
-            X = X.reshape(ntot, -1)
-        elif which_transform == 'wavelet_scattering':
-            mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
-            X = preprocess_data_mnist(mnist)
-            ntot, dx, dy = X.shape
-            S = Scattering2D(shape=(dx,dy), J=3, L=8)
-            X = S(X).reshape(ntot, -1)
-        elif which_transform == 'random_gaussian_features':
-            if which_non_lin == 'erf':
+def get_real_data(p, which_real_dataset = "MNIST", which_transform = "no_transform", which_non_lin = "none", path_to_data_folder = './'):
+    if os.path.isdir(path_to_data_folder) == False: # create the data folder if not there
+        try:
+            os.makedirs(path_to_data_folder)
+        except OSError:
+            print ("\n!!! ERROR: Creation of the directory %s failed" % path_to_data_folder)
+            raise
+    if os.path.isfile(path_to_data_folder +  '/' + 'X_%s_%s_%s.hdf5'%(which_real_dataset, which_transform, which_non_lin)) == False:
+        if which_real_dataset == "MNIST":
+            if which_transform == 'no_transform':
                 mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
                 X = preprocess_data_mnist(mnist)
                 ntot, dx, dy = X.shape
                 X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = special.erf(X @ F)
-            elif which_non_lin == 'tanh':
+            elif which_transform == 'wavelet_scattering':
                 mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
                 X = preprocess_data_mnist(mnist)
                 ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = np.tanh(X @ F)
-            elif which_non_lin == 'sign':
-                mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
-                X = preprocess_data_mnist(mnist)
-                ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = np.sign(X @ F)
-            elif which_non_lin == 'relu':
-                mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
-                X = preprocess_data_mnist(mnist)
-                ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = relu(X @ F)
-    elif which_dataset == "fashion-MNIST":
-        if which_transform == 'no_transform':
-            fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
-            X = preprocess_data_fashionmnist(fashion_mnist)
-            ntot, dx, dy = X.shape
-            X = X.reshape(ntot, -1)
-        elif which_transform == 'wavelet_scattering':
-            fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
-            X = preprocess_data_fashionmnist(fashion_mnist)
-            ntot, dx, dy = X.shape
-            S = Scattering2D(shape=(dx,dy), J=3, L=8)
-            X = S(X).reshape(ntot, -1)
-        elif which_transform == 'random_gaussian_features':
-            if which_non_lin == 'erf':
+                S = Scattering2D(shape=(dx,dy), J=3, L=8)
+                X = S(X).reshape(ntot, -1)
+            elif which_transform == 'random_gaussian_features':
+                if which_non_lin == 'erf':
+                    mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_mnist(mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = special.erf(X @ F)
+                elif which_non_lin == 'tanh':
+                    mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_mnist(mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = np.tanh(X @ F)
+                elif which_non_lin == 'sign':
+                    mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_mnist(mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = np.sign(X @ F)
+                elif which_non_lin == 'relu':
+                    mnist = datasets.MNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_mnist(mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = relu(X @ F)
+        elif which_real_dataset == "fashion-MNIST":
+            if which_transform == 'no_transform':
                 fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
                 X = preprocess_data_fashionmnist(fashion_mnist)
                 ntot, dx, dy = X.shape
                 X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = special.erf(X @ F)
-            elif which_non_lin == 'tanh':
+            elif which_transform == 'wavelet_scattering':
                 fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
                 X = preprocess_data_fashionmnist(fashion_mnist)
                 ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = np.tanh(X @ F)
-            elif which_non_lin == 'sign':
-                fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
-                X = preprocess_data_fashionmnist(fashion_mnist)
-                ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = np.sign(X @ F)
-            elif which_non_lin == 'relu':
-                fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
-                X = preprocess_data_fashionmnist(fashion_mnist)
-                ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = relu(X @ F)
-    elif which_dataset == "cifar10":
-        if which_transform == 'no_transform':
-            transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
-            cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-            X = preprocess_data_cifar10(cifar10)
-            ntot, dx, dy = X.shape
-            X = X.reshape(ntot, -1)
-        elif which_transform == 'wavelet_scattering':
-            transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
-            cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-            X = preprocess_data_cifar10(cifar10)
-            ntot, dx, dy = X.shape
-            S = Scattering2D(shape=(dx,dy), J=3, L=8)
-            X = S(X).reshape(ntot, -1)
-        elif which_transform == 'random_gaussian_features':
-            if which_non_lin == 'erf':
+                S = Scattering2D(shape=(dx,dy), J=3, L=8)
+                X = S(X).reshape(ntot, -1)
+            elif which_transform == 'random_gaussian_features':
+                if which_non_lin == 'erf':
+                    fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_fashionmnist(fashion_mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = special.erf(X @ F)
+                elif which_non_lin == 'tanh':
+                    fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_fashionmnist(fashion_mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = np.tanh(X @ F)
+                elif which_non_lin == 'sign':
+                    fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_fashionmnist(fashion_mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = np.sign(X @ F)
+                elif which_non_lin == 'relu':
+                    fashion_mnist = datasets.FashionMNIST(root='data', train=True, download=True, transform=None)
+                    X = preprocess_data_fashionmnist(fashion_mnist)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = relu(X @ F)
+        elif which_real_dataset == "CIFAR10":
+            if which_transform == 'no_transform':
                 transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
                 cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
                 X = preprocess_data_cifar10(cifar10)
                 ntot, dx, dy = X.shape
                 X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = special.erf(X @ F)
-            elif which_non_lin == 'tanh':
+            elif which_transform == 'wavelet_scattering':
                 transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
                 cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
                 X = preprocess_data_cifar10(cifar10)
                 ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = np.tanh(X @ F)
-            elif which_non_lin == 'sign':
-                transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
-                cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-                X = preprocess_data_cifar10(cifar10)
-                ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = np.sign(X @ F)
-            elif which_non_lin == 'relu':
-                transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
-                cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
-                X = preprocess_data_cifar10(cifar10)
-                ntot, dx, dy = X.shape
-                X = X.reshape(ntot, -1)
-                ntot, d = X.shape
-                F = np.random.normal(0., 1., size = (d, p))
-                X = relu(X @ F)
+                S = Scattering2D(shape=(dx,dy), J=3, L=8)
+                X = S(X).reshape(ntot, -1)
+            elif which_transform == 'random_gaussian_features':
+                if which_non_lin == 'erf':
+                    transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
+                    cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+                    X = preprocess_data_cifar10(cifar10)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = special.erf(X @ F)
+                elif which_non_lin == 'tanh':
+                    transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
+                    cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+                    X = preprocess_data_cifar10(cifar10)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = np.tanh(X @ F)
+                elif which_non_lin == 'sign':
+                    transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
+                    cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+                    X = preprocess_data_cifar10(cifar10)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = np.sign(X @ F)
+                elif which_non_lin == 'relu':
+                    transform = transforms.Compose([transforms.Grayscale(num_output_channels = 1), transforms.ToTensor()])
+                    cifar10 = datasets.CIFAR10(root='./data', train=True, download=True, transform=transform)
+                    X = preprocess_data_cifar10(cifar10)
+                    ntot, dx, dy = X.shape
+                    X = X.reshape(ntot, -1)
+                    ntot, d = X.shape
+                    F = np.random.normal(0., 1., size = (d, p))
+                    X = relu(X @ F)
+        hf = h5py.File(path_to_data_folder + '/' + 'X_%s_%s_%s.hdf5'%(which_real_dataset, which_transform, which_non_lin), 'w')
+        hf.create_dataset('X_%s_%s_%s'%(which_real_dataset, which_transform, which_non_lin), data=X)
+        hf.close()
 
-    hf = h5py.File('./data/X_%s_%s_%s.hdf5'%(which_dataset, which_transform, which_non_lin), 'w')
-    hf.create_dataset('X_%s_%s_%s'%(which_dataset, which_transform, which_non_lin), data=X)
-    hf.close()
+
     return
