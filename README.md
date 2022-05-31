@@ -1,4 +1,4 @@
-# Universality with random labels (:warning: under construction! :construction: :construction_worker:)
+# Universality with random labels 
 Repository for the paper [*Gaussian Universality of Linear Classifiers with Random Labels in High-Dimension*](https://arxiv.org/abs/2205.13303). 
 
 <p float="left">
